@@ -3,11 +3,6 @@ import pandas as pd
 
 def get_distance_matrix(cities):
     # Hacer una solicitud a la API con la lista de ciudades
-    response = requests.post('https://api.openai.com/v1/engines/your-engine-id/jobs',
-                             headers={'Content-Type': 'application/json',
-                                      'Authorization': 'Bearer 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'},
-                             json={'prompt': f'puedes crear una matriz de distacia entre las siguientes ciudades: {", ".join(cities)}',
-                                   'max_tokens': 2048})
 
     # Verificar si la solicitud fue exitosa
     if response.status_code != 200:
