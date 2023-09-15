@@ -35,16 +35,20 @@ class Salesman():
                 self.model += self.y[i] - (n + 1) * self.x[i][j] >= self.y[j] - n
 
     def run_model(self):
-        self.model.optimize()
+        self.model.optimize(max_seconds_same_incumbent=60)
 
         # checking if a solution was found
         if self.model.num_solutions:
             out.write('route with total distance %g found: %s'
                     % (self.model.objective_value, self.places[0]))
             nc = 0
+            result = []
             while True:
                 nc = [i for i in self.V if self.x[nc][i].x >= 0.99][0]
+                result.append(nc)
                 out.write(' -> %s' % self.places[nc])
                 if nc == 0:
                     break
             out.write('\n')
+
+            return result

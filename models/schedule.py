@@ -93,3 +93,28 @@ class Scheduler():
 
         return df_result.set_index(['Person','week'])
                             
+
+class Scheduler2():
+    def __init__(self) -> None:
+        self.model = Model('Scheduler')
+
+    def sets (self, weeks, collabs, day_period: int =1):
+        """ 
+        Define los sets del modelo, requiere lista con semanas a planificar y lista de colaboradores
+        day_period: se refiere a la cantidad de subdiviciones que tendra el día dentro del modelo
+        """
+        self.days = range(7)
+        self.weeks = range(len(weeks))
+        self.collabs = range(len(collabs))
+        if 1 <= day_period<= 1440:
+            self.periods = range(day_period)
+
+    def parameters(self, demand, availability):
+        self.demand = demand
+        self.avalability = availability
+
+    def variables(self):
+        self.x = [[[[self.model.add_var(var_type=BINARY, name=f'work, collab {c}, in week {w}, day {d}, period {p}') for p in self.periods] for d in self.days] for w in self.weeks] for c in self.collabs]
+
+        self.y_over = [[[self.model.add_var(var_type = CONTINUOUS, name = f'y_over_{w}_{d}_{p}') for p in self.periods] for d in self.days] for w in self.weeks]
+        self.y_under = [[[self.model.add_var(var_type = CONTINUOUS, name = f'y_under_{w}_{d}_{p}') for p in self.periods] for d in self.days] for w in self.weeks]
